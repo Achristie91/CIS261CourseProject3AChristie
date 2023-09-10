@@ -1,4 +1,4 @@
-
+##Course Project Phase  3
 def GetEmpName():
     empname = input("Enter employee name:  ")
     return empname
@@ -34,17 +34,16 @@ def printinfo(EmpDetailList):
     TotNetPay = 0.00
     
     for EmpList in EmpDetailList:
+        
         fromdate = EmpList[0]
         todate = EmpList[1]
-        empname = EmpList[3]
-        hours = EmpList[4]
+        empname = EmpList[2]
+        hours = EmpList[3]
         hourlyrate = EmpList[4]
         taxrate = EmpList[5]
         
-        grosspay, incometax, netpay = CalcTaxAndNetPay(hours,
-hourlyrate, taxrate)
-        print(fromdate, todate, empname, f"{hours:,.2f}",
-f"{hourlyrate:,.2f}", f"{grosspay:,.2f}", f"{taxrate:,.1%}",
+        grosspay, incometax, netpay = CalcTaxAndNetPay(hours, hourlyrate, taxrate)
+        print(fromdate, todate, empname, f"{hours:,.2f}", f"{hourlyrate:,.2f}", f"{grosspay:,.2f}", f"{taxrate:,.1%}",
               f"{incometax:,.2f}", f"{netpay:,.2f}")
         
         TotEmployees += 1
@@ -64,28 +63,24 @@ def PrintTotals(EmpTotals):
     print(f"Total Number of Employees: {EmpTotals['TotEmp']}")
     print(f"Total Hours Worked: {EmpTotals['TotHrs']}")
     print(f"Total Gross Pay: {EmpTotals['TotGrossPay']:,.2f}")
-    print(f"Total Income Tax: {EmpTotals['TotTax']:,.2f}")
+    print(f"Total Income Tax: {EmpTotals['TotTax']:,.1%}")
     print(f"Total Net Pay: {EmpTotals['TotNetPay']:,.2f}")
     
 def WriteEmployeeInformation(employee):
     file = open("employeeinfo.txt", "a")
-    
-    file.write( 
-        '{}|{}|{}|{}|{}|{}\n'.format(employee[0], employee[1],
-    employee[2], employee[3], employee[4], employee[5]))    
+    file.write('{}|{}|{}|{}|{}|{}\n'.format(employee[0], employee[1], employee[2], employee[3], employee[4], employee[5]))
     
 def GetFromDate():
     valid = False
     fromdate = ""
     
     while not valid:
-    
         fromdate = input("Enter From Date (mm/dd/yyyy):  ")
-        
         if (len(fromdate.split('/')) != 3 and fromdate.upper() != 'ALL'):
             print("Invalid Date Format:  ")
         else:
             valid = True
+            
     return fromdate
 
 def ReadEmployeeInformation(fromdate):
@@ -103,45 +98,39 @@ def ReadEmployeeInformation(fromdate):
 
         employee = [x.strip() for x in employee.strip().split("|")]
     
-    if not condition: 
-        EmpDetailList.append(
-            [employee[0], employee[1], employee[2],
-float(employee[3]), float(employee[4]), float(employee[5])])
-    else: 
-        if fromdate == employee[0]:
-            EmpDetailList.append(
-                [employee[0], employee[1], employee[2],
-float(employee[3]), float(employee[4]), float(employee[5])])
-
+        if not condition: 
+            EmpDetailList.append([employee[0], employee[1], employee[2], float(employee[3]), float(employee[4]), float(employee[5])])
+        else: 
+            if fromdate == employee[0]:
+                EmpDetailList.append([employee[0], employee[1], employee[2], float(employee[3]), float(employee[4]), float(employee[5])])
     return EmpDetailList
     
-if  __name__ == "__main__":
- 
-       EmpDetailList = []
-       EmpTotals = {}
+if __name__ == "__main__":
+    EmpDetailList = []
+    EmpTotals = {}
     
-       while True:
-           empname = GetEmpName()
-           if (empname.upper() == "END"):
-               break
-           fromdate, todate = GetDatesWorked()
-           hours = GetHoursWorked()
-           hourlyrate = GetHourlyRate()
-           taxrate = GetTaxRate()
+    while True:
+        empname = GetEmpName()
+        if (empname.upper() == "END"):
+            break
+        fromdate, todate = GetDatesWorked()
+        hours = GetHoursWorked()
+        hourlyrate = GetHourlyRate()
+        taxrate = GetTaxRate()
        
-           print()
+        print()
        
-           EmpDetail = [fromdate, todate, empname, hourlyrate, taxrate]
-           WriteEmployeeInformation(EmpDetail)
+        EmpDetail = [fromdate, todate, empname, hourlyrate, taxrate]
+        WriteEmployeeInformation(EmpDetail)
        
-       print()
-       print()
-       fromdate = GetFromDate()
+    print()
+    print()
+    fromdate = GetFromDate()
        
-       EmpDetailList = ReadEmployeeInformation(fromdate)
+    EmpDetailList = ReadEmployeeInformation(fromdate)
        
-       print()
-       printinfo(EmpDetailList)
+    print()
+    printinfo(EmpDetailList)
        
-       print()
-       PrintTotals(EmpTotals)
+    print()
+    PrintTotals(EmpTotals)
